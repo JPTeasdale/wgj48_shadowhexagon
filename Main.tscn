@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://screens/PauseScreen.tscn" type="PackedScene" id=2]
+[ext_resource path="res://screens/TitleCard.tscn" type="PackedScene" id=3]
+[ext_resource path="res://screens/WinScreen.tscn" type="PackedScene" id=4]
+
+[node name="Node" type="Node"]
+
+pause_mode = 2
+script = ExtResource( 1 )
+_sections_unfolded = [ "Mouse", "Pause" ]
+
+[node name="PauseScreen" parent="." index="0" instance=ExtResource( 2 )]
+
+visible = false
+show_behind_parent = true
+mouse_filter = 1
+_sections_unfolded = [ "Mouse", "Pause", "Visibility" ]
+
+[node name="TitleCard" parent="." index="1" instance=ExtResource( 3 )]
+
+pause_mode = 1
+visible = false
+_sections_unfolded = [ "Mouse", "Pause" ]
+
+[node name="WinScreen" parent="." index="2" instance=ExtResource( 4 )]
+
+visible = false
+
+

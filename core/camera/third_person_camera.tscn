@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://core/camera/third_person_camera.gd" type="Script" id=1]
+
+[node name="Camera" type="Camera"]
+
+transform = Transform( -0.98279, -0.0900672, 0.161279, 0, 0.873081, 0.487576, -0.184724, 0.479185, -0.858055, 0, 3.34904, -8.11189 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 1000.0
+script = ExtResource( 1 )
+pivot = NodePath("..")
+
+
