@@ -1,5 +1,7 @@
 extends KinematicBody
 
+signal is_frozen(b)
+
 # Constants
 var MAX_SPEED = 20
 var TURN_SPEED = 0.003
@@ -11,21 +13,42 @@ var H_DECELERATION = 40.0
 var SHARP_TURN_THRESHOLD = 140
 var JUMP_POWER = 48.0
 
+var freeze_movement = false
+
 var cached_wall = 0
 func _set_wall_mask(wall):
 	if wall != cached_wall:
 		cached_wall = wall
 		for i in range(1, 4):
 			set_collision_mask_bit(i, i == wall)
+		freeze_movement = is_in_wall()
+		emit_signal("is_frozen", freeze_movement)
 		
 var current_wall = 0
 func set_current_wall(wall):
 	_set_wall_mask(wall)
-	current_wall = wall
+	current_wall = wall 
+	
+func is_in_wall():
+	var tests = [
+		test_move(global_transform, Vector3(1,0,0)),
+		test_move(global_transform, Vector3(-1,0,0)),
+		test_move(global_transform, Vector3(0,-1,0)),
+		test_move(global_transform, Vector3(0,1,0)),
+		test_move(global_transform, Vector3(0,0,1)),
+		test_move(global_transform, Vector3(0,0,-1)),
+	]
+	for t in tests:
+		if !t:
+			return false
+	return true
 
 # Working Variables
 var linear_velocity = Vector3()
 func _physics_process(delta):
+	if freeze_movement:
+		return 
+	
 	var left = -$Camera.global_transform.basis.x 
 	var front = -$Camera.global_transform.basis.z
 	var up = -GRAVITY.normalized() # (up is against gravity)
@@ -42,8 +65,9 @@ func _physics_process(delta):
 		movedir += front
 	if Input.is_action_pressed("game_back"):
 		movedir += -front
+
 		
-	var attempt_jump = Input.is_action_pressed("game_jump")
+	var attempt_jump = Input.is_action_just_pressed("game_jump")
 	
 	var lv = linear_velocity
 	
@@ -67,10 +91,6 @@ func _physics_process(delta):
 		
 	hv = hdir.normalized() * hspeed
 	
-	#if $CeilingDetect.is_colliding():
-	#	_set_wall_mask(current_wall)
-	#else:
-	#	_set_wall_mask(0)
 		
 	if is_on_floor() and attempt_jump:
 		vv = JUMP_POWER

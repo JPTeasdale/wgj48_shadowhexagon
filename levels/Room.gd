@@ -56,6 +56,7 @@ func _ready():
 		
 	for wall in light_walls:
 		wall.off()
+	$Player.connect("is_frozen", $GUI, "set_frozen")
 	
 	$RoofSwitch.connect("pressed", self, "open_roof")
 	$Roof.connect("closed", self, "on_roof_closed")
